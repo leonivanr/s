@@ -5,6 +5,7 @@ const snakeBorderColor = 'black';
 const snakeBackgroundColor = 'brown';
 const obtPuntaje = document.querySelector('#puntaje');
 const jugarBtn = document.querySelector('.jugar');
+let cambiarVelocidad = false;
 // Velocidad inicial;
 let speed = 100;
 //Puntaje inicial.
@@ -41,15 +42,15 @@ let dx = 10;
 let dy = 0;
 
 // Obtener canvas.
-var canvasGame = document.querySelector('#gameCanvas');
+const canvasGame = document.querySelector('#gameCanvas');
 
 // Setear a 2d.
-var canSnake = canvasGame.getContext('2d');
+var ctx = canvasGame.getContext('2d');
 
 //Seteamos el color.
-canSnake.fillStyle = canvasBackgroundColor;
+ctx.fillStyle = canvasBackgroundColor;
 // Seteamos el borde.
-canSnake.strokeStyle = canvasBorderColor;
+ctx.strokeStyle = canvasBorderColor;
 
 // Iniciar con boton
 jugarBtn.addEventListener('click', iniciarJuego);
@@ -69,6 +70,7 @@ function main() {
     };
 
     setTimeout(function onTick() {
+        cambiarVelocidad = false;
         limpiarLienzo();
         dibujarComida();
         moverSerpiente();
@@ -81,22 +83,22 @@ function main() {
 // Limpiamos el lienzo, para eliminiar los rastros dejados por la serpiente.
 function limpiarLienzo() {
 
-    canSnake.fillStyle = canvasBackgroundColor;
-    canSnake.strokeStyle = canvasBorderColor;
+    ctx.fillStyle = canvasBackgroundColor;
+    ctx.strokeStyle = canvasBorderColor;
 
-    canSnake.fillRect(0, 0, canvasGame.width, canvasGame.height);
-    canSnake.strokeRect(0, 0, canvasGame.width, canvasGame.height);
+    ctx.fillRect(0, 0, canvasGame.width, canvasGame.height);
+    ctx.strokeRect(0, 0, canvasGame.width, canvasGame.height);
 
 }
 //Dibujamos un rectangulo por cada par de coordenadas - cuerpo de snake.
 function dibujarCuerpoSerpiente(snakeCuerpo) {
     // Damos color y borde a nuestra serpiente.
-    canSnake.fillStyle = snakeBackgroundColor;
-    canSnake.StrokeStyle = snakeBorderColor;
+    ctx.fillStyle = snakeBackgroundColor;
+    ctx.StrokeStyle = snakeBorderColor;
 
     // Dibujamos con las coordenadas que tomamos de snakeCuerpo.
-    canSnake.fillRect(snakeCuerpo.x, snakeCuerpo.y, 10, 10);
-    canSnake.strokeRect(snakeCuerpo.x, snakeCuerpo.y, 10, 10);
+    ctx.fillRect(snakeCuerpo.x, snakeCuerpo.y, 10, 10);
+    ctx.strokeRect(snakeCuerpo.x, snakeCuerpo.y, 10, 10);
 }
 //
 function dibujarSerpiente() {
@@ -108,6 +110,9 @@ function cambiarDireccion(e) {
     const flechaIzquierda = 37;
     const flechaArriba = 38;
     const flechaAbajo = 40;
+    /* Previene que haga reverso. */
+    if (cambiarVelocidad) return;
+    cambiarVelocidad = true;
 
     const teclaPresionada = e.keyCode;
     const yendoDerecha = dx === 10;
@@ -172,12 +177,12 @@ function generarComida() {
 }
 
 function dibujarComida() {
-    canSnake.fillStyle = 'red';
-    canSnake.strokeStyle = 'black';
+    ctx.fillStyle = 'orange';
+    ctx.strokeStyle = 'black';
 
 
-    canSnake.fillRect(comidaX, comidaY, 10, 10);
-    canSnake.strokeRect(comidaX, comidaY, 10, 10);
+    ctx.fillRect(comidaX, comidaY, 10, 10);
+    ctx.strokeRect(comidaX, comidaY, 10, 10);
 
 }
 
@@ -207,7 +212,7 @@ function iniciarJuego() {
     main();
     // Genero comida para la primera vez. 
     generarComida();
-    
+
 }
 
 function juegoAcabado() {
