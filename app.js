@@ -223,3 +223,43 @@ function juegoAcabado() {
     puntaje.style.display = 'block';
     titulo.textContent = 'PERDISTE';
 }
+function cambiarDireccion(e) {
+
+    const flechaDerecha = 39;
+    const flechaIzquierda = 37;
+    const flechaArriba = 38;
+    const flechaAbajo = 40;
+    /* Previene que haga reverso. */
+    if (cambiarVelocidad) return;
+    cambiarVelocidad = true;
+
+    const teclaPresionada = e.keyCode;
+    const yendoDerecha = dx === 10;
+    const yendoIzquierda = dx === -10;
+    const yendoArriba = dy === -10;
+    const yendoAbajo = dy === 10;
+    // 
+    if (teclaPresionada === flechaDerecha || e === 'right' && !yendoIzquierda) {
+        dx = 10;
+        dy = 0;
+    }
+    if (teclaPresionada === flechaArriba || e === 'up' && !yendoAbajo) {
+        dx = 0;
+        dy = -10;
+    }
+    if (teclaPresionada === flechaIzquierda || e === 'left' && !yendoDerecha) {
+        dx = -10;
+        dy = 0;
+    }
+    if (teclaPresionada === flechaAbajo || e === 'down' && !yendoArriba) {
+        dx = 0;
+        dy = 10;
+    }
+
+}
+$(".container").swipe( {
+    //Generic swipe handler for all directions
+    swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+      cambiarDireccion(direction); 
+    }
+});
